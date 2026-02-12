@@ -63,7 +63,10 @@ export class ZenQuotesAdapter {
             z.object({
                 q: z.string(),
                 a: z.string()
-            })
+            }).transform((data) => ({
+                quote: data.q,
+                author: data.a
+            }))
         );
 
         try {
