@@ -3,17 +3,49 @@ import './utils/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
 import { ApiExceptionFilter, SuccessResponseInterceptor } from './helpers';
-import { ValidationPipe } from '@nestjs/common';
+import { config } from './utils/config';
+import { GlobalValidationPipe } from './helpers/pipes/validation.pipe';
 
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    try {
+        const app = await NestFactory.create(AppModule);
 
-    app.useGlobalPipes(new ValidationPipe());
-    app.useGlobalFilters(new ApiExceptionFilter());
-    app.useGlobalInterceptors(new SuccessResponseInterceptor());
+        app.enableCors({
+            origin: '*'
+        });
 
-    await app.listen(process.env.PORT ?? 3000);
+        app.useGlobalPipes(new GlobalValidationPipe());
+        app.useGlobalInterceptors(new SuccessResponseInterceptor());
+        app.useGlobalFilters(new ApiExceptionFilter());
+
+        process.on('SIGTERM', async () => {
+            console.error('SIGTERM received. Shutting down gracefully...');
+            await app.close();
+            process.exit(0);
+        });
+
+        process.on('SIGINT', async () => {
+            console.error('SIGINT received. Shutting down gracefully...');
+            await app.close();
+            process.exit(0);
+        });
+
+        await app.listen(config.PORT ?? 3000);
+    } catch (error) {
+        console.error('Fatal bootstrap error:', error);
+        process.exit(1);
+    }
 }
+
+process.on('unhandledRejection', (reason: any) => {
+    console.error('Unhandled Rejection:', reason);
+    process.exit(1);
+});
+
+process.on('uncaughtException', (error: Error) => {
+    console.error('Uncaught Exception:', error);
+    process.exit(1);
+});
 
 bootstrap();

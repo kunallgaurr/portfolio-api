@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Experience, ExperiencePoint } from "src/module/experience/entities";
+import { Education, Experience, ExperiencePoint, MediaAsset } from "src/module";
 import { config } from "src/utils";
 
 @Module({
@@ -14,7 +14,9 @@ import { config } from "src/utils";
             database: config.POSTGRES_DB_NAME,
             entities: [
                 Experience,
-                ExperiencePoint
+                ExperiencePoint,
+                Education,
+                MediaAsset
             ],
             synchronize: true,
             ssl: false,

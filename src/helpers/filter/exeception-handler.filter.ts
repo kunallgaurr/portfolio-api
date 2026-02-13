@@ -17,22 +17,12 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    console.log(exception);
-
     // ApiError (expected errors)
     if (exception instanceof ApiError) {
       return response
         .status(HttpStatus.OK)
         .json(
           HttpResponseBuilder.error(exception),
-        );
-    }
-
-    if(exception instanceof BadRequestException) {
-        return response
-        .status(HttpStatus.OK)
-        .json(
-          HttpResponseBuilder.error({statusCode: 400, message: exception.message}),
         );
     }
 

@@ -18,12 +18,12 @@ export class HttpResponseBuilder {
         return this.formatResponse(200, message ?? 'Success', data);
     }
 
-    public static error(error: unknown) {
+    public static error<T>(error: unknown, data?: T) {
         if(error instanceof ApiError) {
             return this.formatResponse(
                 error.statusCode as number,
                 error.message,
-                null
+                data ?? null
             )
         }
 

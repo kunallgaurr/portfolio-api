@@ -7,7 +7,7 @@ import { Project } from './project.entity';
 import { BaseEntity } from 'src/core';
 
 @Entity('project_points')
-export class ProjectPoint extends BaseEntity{
+export class ProjectPoint extends BaseEntity {
     @Column({ type: 'text' })
     content: string;
 

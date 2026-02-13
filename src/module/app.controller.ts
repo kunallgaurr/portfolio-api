@@ -9,4 +9,9 @@ export class AppController {
     getHello() {
         return this.appService.healthCheck();
     }
+
+    @Get('/')
+    welcomeMessage() {
+        return this.appService.welcomeMessage();
+    }
 }
