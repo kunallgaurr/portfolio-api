@@ -10,6 +10,7 @@ import { EducationModule } from './education';
 import { ExperienceModule } from './experience';
 import { PhotosModule } from './photos';
 import { RateLimiterMiddleware, RequestContextMiddleware } from 'src/helpers';
+import { ContactModule } from './contact';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { RateLimiterMiddleware, RequestContextMiddleware } from 'src/helpers';
         ExperienceModule,
         DateModule,
         EducationModule,
-        PhotosModule
+        PhotosModule,
+        ContactModule
     ],
     controllers: [AppController],
     providers: [AppService],
