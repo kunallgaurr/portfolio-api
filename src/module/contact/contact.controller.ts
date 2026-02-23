@@ -1,6 +1,6 @@
-import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Query } from "@nestjs/common";
 import { ContactService } from "./contact.service";
-import { RecieveMessageSchema } from "./contact.schema";
+import { GetAllMessagesSchema, RecieveMessageSchema } from "./contact.schema";
 
 @Controller('contact')
 export class ContactController {
@@ -11,5 +11,15 @@ export class ContactController {
     @Post()
     async recieveMessage(@Body() body: RecieveMessageSchema) {
         return await this.contactService.recieveMessage(body)
+    }
+
+    @Get()
+    async getAllMessages(@Query() query: GetAllMessagesSchema) {
+        return await this.contactService.getAllMessages(query);
+    }
+
+    @Get(':id')
+    async getMessageById(@Param('id') id: string) {
+        return await this.contactService.getMessageById(id);
     }
 }

@@ -11,25 +11,29 @@ import { ExperienceModule } from './experience';
 import { PhotosModule } from './photos';
 import { RateLimiterMiddleware, RequestContextMiddleware } from 'src/helpers';
 import { ContactModule } from './contact';
+import { RedisModule } from 'src/core';
+import { RequestValidatorMiddleware } from 'src/helpers/middleware/request-validator.middleware';
 
 @Module({
     imports: [
-        StatusModule, 
-        WeatherModule, 
+        StatusModule,
+        WeatherModule,
         QuoteModule,
         PostgresModule,
         ExperienceModule,
         DateModule,
         EducationModule,
         PhotosModule,
-        ContactModule
+        ContactModule,
+        RedisModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
+            .apply(RequestValidatorMiddleware).forRoutes('*')
             .apply(RequestContextMiddleware).forRoutes('*')
             .apply(RateLimiterMiddleware).forRoutes('*');
     }

@@ -4,10 +4,10 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
-  BadRequestException,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { ApiError } from 'src/utils/api-errors';
+import { requestContext } from 'src/core';
+import { ApiError, BadRequestError, ForbiddenError, NotFoundError, TooManyRequestsError, UnauthorizedError } from 'src/utils/api-errors';
 import { HttpResponseBuilder } from 'src/utils/response-builder';
 
 @Catch()
@@ -16,6 +16,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+    const context = requestContext.getStore();
 
     // ApiError (expected errors)
     if (exception instanceof ApiError) {

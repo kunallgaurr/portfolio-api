@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { last } from "rxjs";
-import { WeatherAdapter } from "src/adapters/weather/weather.adapter";
 import { constants } from "src/utils";
 
 @Injectable()
@@ -11,10 +9,15 @@ export class StatusService {
         const startTime = constants.START_TIME;
         const endTime = constants.END_TIME;
 
-        const date = new Date();
-        const hour = date.getHours();
+        const istHour = Number(
+            new Intl.DateTimeFormat("en-US", {
+                timeZone: "Asia/Kolkata",
+                hour: "2-digit",
+                hour12: false,
+            }).format(new Date()),
+        );
 
-        if(hour >= startTime && hour < endTime) {
+        if(istHour >= startTime && istHour < endTime) {
             return {
                 status: "Online",
                 reason: "Working hours."

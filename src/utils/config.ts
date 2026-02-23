@@ -8,6 +8,8 @@ const environmentVariablesSchema = z.object({
         .enum(['development', 'testing', 'production'])
         .default('development'),
 
+    SECURITY_KEY: z.string().min(1),
+
     WEATHER_API_SECRET_KEY: z.string().min(1),
     WEATHER_API_BASE_URL: z.url(),
     ZEN_QUOTES_BASE_URL: z.url(),
@@ -20,7 +22,12 @@ const environmentVariablesSchema = z.object({
 
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_SECRET_KEY: z.string().min(1),
-    CLOUDINARY_ENVIRONMENT_NAME: z.string().min(1)
+    CLOUDINARY_ENVIRONMENT_NAME: z.string().min(1),
+
+    REDIS_HOST: z.string().min(1),
+    REDIS_PORT: z.coerce.number().int().positive(),
+    REDIS_USERNAME: z.string().min(1),
+    REDIS_PASSWORD: z.string().min(1),
 });
 
 export const config = environmentVariablesSchema.parse(process.env);
