@@ -56,7 +56,7 @@ export class ZenQuotesAdapter {
 
     async getQuoteOfTheDay() {
         const params: ZenQuotesParams = {
-            mode: ZenQuotesMode.RANDOM
+            mode: ZenQuotesMode.QUOTES
         }
 
         const schema = z.array(
