@@ -15,13 +15,14 @@ export class QuoteService {
             const key = constants.REDIS_KEYS.QUOTES_CACHING.KEY;
             const ttl = constants.REDIS_KEYS.QUOTES_CACHING.TTL;
 
-            const cachedQuotes = await this.redisService.get(key);
-            if(cachedQuotes) return JSON.parse(cachedQuotes);
+            const cachedQuotes = await this.redisService.get<unknown[]>(key);
+            if (cachedQuotes) return cachedQuotes;
 
             const response = await this.zenQuoteAdapter.getQuoteOfTheDay();
-            await this.redisService.set(key, JSON.stringify(response), ttl);
+            await this.redisService.set(key, response, ttl);
             return response;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
