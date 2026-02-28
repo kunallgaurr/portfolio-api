@@ -7,7 +7,7 @@ const environmentVariablesSchema = z.object({
     NODE_ENV: z
         .enum(['development', 'testing', 'production'])
         .default('development'),
-
+    ALLOWED_ORIGINS: z.string().min(1).transform((str) => str.split(',').map((origin) => origin.trim())),
     SECURITY_KEY: z.string().min(1),
 
     WEATHER_API_SECRET_KEY: z.string().min(1),

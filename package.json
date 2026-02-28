@@ -30,6 +30,7 @@
     "class-validator": "^0.14.3",
     "cloudinary": "^2.9.0",
     "dotenv": "^17.2.3",
+    "helmet": "^8.1.0",
     "multer": "^2.0.2",
     "pg": "^8.18.0",
     "redis": "^5.11.0",
