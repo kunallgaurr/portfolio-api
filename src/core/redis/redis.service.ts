@@ -89,6 +89,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         return client.ttl(key);
     }
 
+    async increment(key: string, amount = 1): Promise<number> {
+        const client = this.getClient();
+        return client.incrBy(key, amount);
+    }
+
     // -------------------------------------------------------------------------
     // Hash operations
     // -------------------------------------------------------------------------
