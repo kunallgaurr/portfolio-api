@@ -20,8 +20,6 @@ async function bootstrap() {
             crossOriginEmbedderPolicy: false,
         }));
 
-        console.log(config.ALLOWED_ORIGINS);
-
         app.enableCors({
             origin: '*',
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
