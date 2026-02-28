@@ -5,14 +5,26 @@ import { AppModule } from './module/app.module';
 import { ApiExceptionFilter, SuccessResponseInterceptor } from './helpers';
 import { config } from './utils/config';
 import { GlobalValidationPipe } from './helpers/pipes/validation.pipe';
+import helmet from 'helmet';
 
 
 async function bootstrap() {
     try {
-        const app = await NestFactory.create(AppModule);
+        const app = await NestFactory.create(AppModule, {
+            abortOnError: true,
+            bufferLogs: true,
+        });
+
+        app.use(helmet({
+            contentSecurityPolicy: false,
+            crossOriginEmbedderPolicy: false,
+        }));
 
         app.enableCors({
-            origin: '*'
+            origin: config.ALLOWED_ORIGINS,
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: false,
         });
 
         app.useGlobalPipes(new GlobalValidationPipe());
