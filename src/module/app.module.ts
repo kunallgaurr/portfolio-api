@@ -13,6 +13,7 @@ import { RateLimiterMiddleware, RequestContextMiddleware } from 'src/helpers';
 import { ContactModule } from './contact';
 import { RedisModule } from 'src/core';
 import { RequestValidatorMiddleware } from 'src/helpers/middleware/request-validator.middleware';
+import { ProjectsModule } from './projects';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { RequestValidatorMiddleware } from 'src/helpers/middleware/request-valid
         PhotosModule,
         ContactModule,
         RedisModule,
+        ProjectsModule
     ],
     controllers: [AppController],
     providers: [AppService],

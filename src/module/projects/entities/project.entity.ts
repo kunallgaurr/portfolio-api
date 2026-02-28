@@ -12,19 +12,19 @@ export class Project extends BaseEntity {
     title: string;
 
     @Column({ nullable: true })
-    githubUrl: string;
+    githubUrl?: string;
 
     @Column({ nullable: true })
-    liveUrl: string;
+    liveUrl?: string;
 
     @Column({ nullable: true })
-    imageUrl: string;
+    imageUrl?: string;
 
     @Column({ default: false })
     isFeatured: boolean;
 
     @Column({ type: 'jsonb', nullable: true })
-    techStack: string[];
+    techStack?: string[];
 
     @OneToMany(() => ProjectPoint, (point) => point.project, {
         cascade: true,
