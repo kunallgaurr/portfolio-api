@@ -5,10 +5,16 @@ const REDIS_KEYS = {
     }
 }
 
+const EVENTS = {
+    VISITOR_CREATED: 'visitor.created',
+    VISITOR_UPDATED: 'visitor.updated',
+}
+
 export const constants = {
     START_TIME: 8,
     END_TIME: 20,
     RATE_LIMIT_WINDOW: 2,
     RATE_LIMIT_MAX_REQUESTS: 3,
-    REDIS_KEYS
+    REDIS_KEYS,
+    EVENTS
 }

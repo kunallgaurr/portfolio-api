@@ -11,10 +11,14 @@ export class RequestContextMiddleware implements NestMiddleware {
         const timestamp = Date.now();
         const ip        = req.ip;
         const ua = req.headers['user-agent'];
+        const deviceId = req.headers['x-device-id'];
+        const sessionId = req.headers['x-session-id'];
 
         const userAgent = new UAParser(ua).getResult();
 
+        store.set('deviceId', deviceId);
         store.set('requestId', requestId);
+        store.set('sessionId', sessionId);
         store.set('timestamp', timestamp);
         store.set('ip', ip);
         store.set('deviceModel', userAgent.device.model);

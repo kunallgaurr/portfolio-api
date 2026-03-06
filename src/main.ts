@@ -2,7 +2,7 @@ import './utils/config';
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
-import { ApiExceptionFilter, SuccessResponseInterceptor } from './helpers';
+import { ApiExceptionFilter, SuccessResponseInterceptor, VisitorLoggingInterceptor } from './helpers';
 import { config } from './utils/config';
 import { GlobalValidationPipe } from './helpers/pipes/validation.pipe';
 import helmet from 'helmet';
