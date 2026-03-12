@@ -55,7 +55,6 @@ export class ExperienceService {
                 id: true,
                 companyName: true,
                 role: true,
-                description: true,
                 startDate: true,
                 endDate: true,
                 isCurrent: true,
