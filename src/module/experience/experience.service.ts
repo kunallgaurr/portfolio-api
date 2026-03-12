@@ -64,9 +64,6 @@ export class ExperienceService {
             take: normalizedPageSize,
             order: {
                 startDate: 'DESC',
-                points: {
-                    order: 'ASC',
-                },
             },
         });
 
