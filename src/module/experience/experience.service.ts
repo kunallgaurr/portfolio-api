@@ -51,7 +51,15 @@ export class ExperienceService {
         const offset = (normalizedPageNumber - 1) * normalizedPageSize;
 
         const experiences = await this.experienceRepository.find({
-            relations: ['points'],
+            select: {
+                id: true,
+                companyName: true,
+                role: true,
+                description: true,
+                startDate: true,
+                endDate: true,
+                isCurrent: true,
+            },
             skip: offset,
             take: normalizedPageSize,
             order: {
@@ -63,6 +71,15 @@ export class ExperienceService {
         });
 
         return experiences;
+    };
+
+    async getExperienceById(id) {
+        const experience = await this.experienceRepository.findOne({
+            where: { id },
+            relations: ['points']
+        });
+
+        return experience;
     };
 
     async editExperience(id, payload) {

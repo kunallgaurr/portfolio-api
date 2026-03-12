@@ -18,26 +18,33 @@ export class ExerienceController {
         return await this.experienceService.getAllExperieces({});
     }
 
-    @Put('/:experienceId')
-    async editExperience(@Param() experienceId: string, @Body() body) {
-        return await this.experienceService.editExperience(experienceId, body);
+    @Get('/:id')
+    async getExperienceById(@Param('id') id: string) {
+        return await this.experienceService.getExperienceById(id);
     }
 
-    @Delete('/:experienceId')
-    async removeExperience(@Param() experienceId: string) {
-        return await this.experienceService.deleteExperience(experienceId);
+    @Put('/:id')
+    async editExperience(@Param('id') id: string, @Body() body) {
+        return await this.experienceService.editExperience(id, body);
+    }
+
+    @Delete('/:id')
+    async removeExperience(@Param('id') id: string) {
+        return await this.experienceService.deleteExperience(id);
     }
 
     @Post('/point')
     async addExperiencePoint(@Body() body) {
         return await this.experienceService.deleteExperience(body);
     }
-    @Delete('/point/:experiencePointId')
-    async editExperiencePoint(@Param() experiencePointId: string) {
-        return await this.experienceService.editExperiencePoint(experiencePointId);
+
+    @Delete('/point/:id')
+    async editExperiencePoint(@Param('id') id: string) {
+        return await this.experienceService.editExperiencePoint(id);
     }
-    @Delete('/point/:experiencePointId')
-    async removeExperiencePoint(@Param() experiencePointId: string) {
-        return await this.experienceService.removeExperiencePoint(experiencePointId);
+
+    @Delete('/point/:id')
+    async removeExperiencePoint(@Param('id') id: string) {
+        return await this.experienceService.removeExperiencePoint(id);
     }
 }

@@ -1,0 +1,1 @@
+export * from "./posts.entity";

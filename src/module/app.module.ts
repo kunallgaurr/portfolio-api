@@ -14,6 +14,7 @@ import { ContactModule } from './contact';
 import { RedisModule } from 'src/core';
 import { RequestValidatorMiddleware } from 'src/helpers/middleware/request-validator.middleware';
 import { ProjectsModule } from './projects';
+import { PostsModule } from './posts';
 
 @Module({
     imports: [
@@ -27,7 +28,8 @@ import { ProjectsModule } from './projects';
         PhotosModule,
         ContactModule,
         RedisModule,
-        ProjectsModule
+        ProjectsModule,
+        PostsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
