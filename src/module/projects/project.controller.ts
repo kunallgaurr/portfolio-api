@@ -16,6 +16,21 @@ export class ProjectsController {
         return await this.projectsService.getAllProjects(query);
     }
 
+    /** Fetch your public GitHub repos as project-like list (does not save to DB). */
+    @Get('from-github')
+    async getFromGitHub(@Query('username') username: string) {
+        if (!username?.trim()) {
+            return { error: 'Query param "username" is required', example: '/projects/from-github?username=your-github-username' };
+        }
+        return await this.projectsService.getProjectsFromGitHub(username.trim());
+    }
+
+    /** Fetch preview image from project's liveUrl (og:image) and set as imageUrl. */
+    @Patch(':id/fetch-preview')
+    async fetchPreview(@Param('id') id: string) {
+        return await this.projectsService.fetchPreviewForProject(id);
+    }
+
     @Get('/:id')
     async getProject(@Param('id') id: string) {
         return await this.projectsService.getProjectById(id);

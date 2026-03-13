@@ -22,7 +22,6 @@ export class QuoteService {
             await this.redisService.set(key, response, ttl);
             return response;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }

@@ -1,14 +1,13 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Post } from "./entities";
-import { PostsRepository } from "./repositories";
 import { PostsService } from "./posts.service";
 import { PostsController } from "./posts.controller";
+import { HashnodeAdapter } from "src/adapters/hashnode";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Post])],
+    imports: [],
     controllers: [PostsController],
-    providers: [PostsRepository, PostsService],
-    exports: [PostsService],
+    providers: [PostsService, HashnodeAdapter],
+    exports: [PostsService, HashnodeAdapter],
 })
 export class PostsModule {}
+

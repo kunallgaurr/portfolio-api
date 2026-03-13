@@ -1,28 +1,50 @@
-import { Injectable } from "@nestjs/common";
-import { PostsRepository } from "./repositories";
-import { Post } from "./entities";
+import { Inject, Injectable } from "@nestjs/common";
+import { HashnodeAdapter } from "src/adapters/hashnode/hashnode.adapter";
+import { ListPostsQuery } from "./posts.types";
 
 @Injectable()
 export class PostsService {
-    constructor(private readonly postsRepository: PostsRepository) {}
 
-    /** List published posts (no draft), ordered by publishedAt desc. */
-    async findAll(): Promise<Post[]> {
-        return this.postsRepository.find({
-            where: { isDraft: false },
-            order: { publishedAt: "DESC" },
-        });
+    constructor(@Inject(HashnodeAdapter) private readonly hashnodeAdapter  : HashnodeAdapter) {}
+
+    async getAllPosts(username: string, query: ListPostsQuery) {
+        const page = query.page ? Number(query.page) : 1;
+        const pageSize = query.pageSize ? Number(query.pageSize) : 10;
+
+        const data = await this.hashnodeAdapter.getPostsByUser(username, page, pageSize);
+
+        const edges = data.user?.posts.edges ?? [];
+
+        return edges.map(({ node }) => ({
+            id: node.id,
+            title: node.title,
+            slug: node.slug,
+            brief: node.brief,
+            publishedAt: node.publishedAt,
+            url: node.url,
+            imageUrl: node.coverImage?.url ?? null,
+        }));
     }
 
-    /** Get one post by id. */
-    async findById(id: string): Promise<Post | null> {
-        return this.postsRepository.findOne({ where: { id } });
-    }
+    async getPostBySlug(username: string, slug: string) {
+        const data = await this.hashnodeAdapter.getPostBySlug(username, slug);
+        
+        const post = data.publication?.post;
 
-    /** Get one published post by slug (for public blog URLs). */
-    async findBySlug(slug: string): Promise<Post | null> {
-        return this.postsRepository.findOne({
-            where: { slug, isDraft: false },
-        });
+        if (!post) {
+            return null;
+        }
+
+        return {
+            id: post.id,
+            title: post.title,
+            slug: post.slug,
+            brief: post.brief,
+            publishedAt: post.publishedAt,
+            url: post.url,
+            imageUrl: post.coverImage?.url ?? null,
+            content: post.content.markdown,
+        };
     }
 }
+

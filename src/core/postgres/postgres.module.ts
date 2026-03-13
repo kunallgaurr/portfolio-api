@@ -3,7 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Education, Experience, ExperiencePoint, MediaAsset } from "src/module";
 import { Contact } from "src/module/contact";
 import { Project, ProjectPoint } from "src/module/projects";
-import { Post } from "src/module/posts";
 import { config } from "src/utils";
 
 @Module({
@@ -23,7 +22,6 @@ import { config } from "src/utils";
                 Contact,
                 Project,
                 ProjectPoint,
-                Post,
             ],
             synchronize: true,
             ssl: false,

@@ -28,6 +28,9 @@ const environmentVariablesSchema = z.object({
     REDIS_PORT: z.coerce.number().int().positive(),
     REDIS_USERNAME: z.string().min(1),
     REDIS_PASSWORD: z.string().min(1),
+
+    HASHNODE_BASE_URL: z.url(),
+    HASHNODE_ACCESS_TOKEN: z.string().min(1),
 });
 
 export const config = environmentVariablesSchema.parse(process.env);
