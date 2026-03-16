@@ -73,6 +73,6 @@ export class GithubAdapter {
             headers: {},
         };
 
-        return this.call(params, GithubRepoSchema);
+        return await this.call(params, GithubRepoSchema);
     }
 }

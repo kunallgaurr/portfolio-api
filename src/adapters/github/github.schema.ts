@@ -3,9 +3,9 @@ import { z } from "zod";
 const OwnerSchema = z.object({
     login: z.string(),
     id: z.number(),
-    node_id: z.string(),
+    node_id: z.string().optional(),
     avatar_url: z.string().url(),
-    gravatar_id: z.string(),
+    gravatar_id: z.string().optional(),
     url: z.string().url(),
     html_url: z.string().url(),
     followers_url: z.string().url(),
@@ -17,9 +17,9 @@ const OwnerSchema = z.object({
     repos_url: z.string().url(),
     events_url: z.string(),
     received_events_url: z.string().url(),
-    type: z.string(),
-    user_view_type: z.string(),
-    site_admin: z.boolean(),
+    type: z.string().optional(),
+    user_view_type: z.string().optional(),
+    site_admin: z.boolean().optional(),
 });
 
 const PermissionsSchema = z.object({
@@ -90,7 +90,7 @@ export const GithubRepoSchema = z.object({
     clone_url: z.string().url(),
     svn_url: z.string().url(),
 
-    homepage: z.string().url().nullable(),
+    homepage: z.union([z.string().url(), z.literal(""), z.null()]).optional(),
 
     size: z.number(),
     stargazers_count: z.number(),
@@ -114,20 +114,19 @@ export const GithubRepoSchema = z.object({
 
     allow_forking: z.boolean(),
     is_template: z.boolean(),
-    web_commit_signoff_required: z.boolean(),
-    has_pull_requests: z.boolean(),
-    pull_request_creation_policy: z.string(),
+    web_commit_signoff_required: z.boolean().optional(),
+    has_pull_requests: z.boolean().optional(),
+    pull_request_creation_policy: z.string().optional(),
 
-    topics: z.array(z.string()),
+    topics: z.array(z.string()).optional(),
 
-    visibility: z.string(),
+    visibility: z.string().optional(),
     forks: z.number(),
     open_issues: z.number(),
     watchers: z.number(),
     default_branch: z.string(),
 
-    permissions: PermissionsSchema,
+    permissions: PermissionsSchema.optional(),
 });
 
 export const GithubRepoListSchema = z.array(GithubRepoSchema);
-export type GithubRepoList = z.infer<typeof GithubRepoListSchema>;
