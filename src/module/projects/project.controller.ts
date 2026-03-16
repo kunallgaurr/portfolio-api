@@ -12,4 +12,8 @@ export class ProjectsController {
         return await this.projectsService.getProjects();
     }
 
+    @Get(':slug')
+    async getOneProject(@Param('slug') slug: string) {
+        return await this.projectsService.getOneProject(slug);
+    }
 }

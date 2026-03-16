@@ -130,3 +130,9 @@ export const GithubRepoSchema = z.object({
 });
 
 export const GithubRepoListSchema = z.array(GithubRepoSchema);
+
+/** GitHub "get readme" API response (content is base64). */
+export const GithubReadmeContentSchema = z.object({
+    content: z.string(),
+    encoding: z.string(),
+});
