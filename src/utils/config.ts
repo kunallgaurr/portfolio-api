@@ -31,10 +31,6 @@ const environmentVariablesSchema = z.object({
 
     HASHNODE_BASE_URL: z.url(),
     HASHNODE_ACCESS_TOKEN: z.string().min(1),
-
-    GITHUB_USERNAME: z.string().min(1),
-    GITHUB_BASE_URL: z.url(),
-    GITHUB_ACCESS_TOKEN: z.string().min(1),
 });
 
 export const config = environmentVariablesSchema.parse(process.env);
