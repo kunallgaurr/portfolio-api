@@ -1,98 +1,149 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Portfolio API Server
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend API for [kunalgaur.in](https://kunalgaur.in)—a NestJS application that serves status, weather, quotes, blog posts (Hashnode), projects, experience, education, photos, contact, and more.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech stack
 
-## Description
+- **Runtime:** Node.js  
+- **Framework:** [NestJS](https://nestjs.com)  
+- **Database:** PostgreSQL (TypeORM)  
+- **Cache:** Redis  
+- **Validation:** class-validator, Zod  
+- **Storage / media:** Cloudinary  
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
+
+- Node.js 22+  
+- PostgreSQL  
+- Redis  
+- (Optional) Docker & Docker Compose  
 
 ## Project setup
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+Copy `.env.example` to `.env` and set the required variables (see [Environment variables](#environment-variables)).
+
+## Running the app
 
 ```bash
-# development
-$ npm run start
+# Development (watch mode)
+npm run start:dev
 
-# watch mode
-$ npm run start:dev
+# One-off run
+npm run start
 
-# production mode
-$ npm run start:prod
+# Production (after build)
+npm run build
+npm run start:prod
 ```
 
-## Run tests
+By default the server listens on the port set in `PORT` (e.g. `3001`).
+
+## Environment variables
+
+All of the following are validated at startup via `src/utils/config.ts`. Missing or invalid values will prevent the app from starting.
+
+| Variable | Description |
+|----------|-------------|
+| `PORT` | HTTP server port (e.g. `3001`) |
+| `NODE_ENV` | `development`, `testing`, or `production` |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins |
+| `SECURITY_KEY` | App security key |
+| `WEATHER_API_SECRET_KEY` | Weather API key |
+| `WEATHER_API_BASE_URL` | Weather API base URL |
+| `ZEN_QUOTES_BASE_URL` | Zen Quotes API base URL |
+| `POSTGRES_DB_HOST` | PostgreSQL host |
+| `POSTGRES_DB_PORT` | PostgreSQL port |
+| `POSTGRES_DB_NAME` | Database name |
+| `POSTGRES_DB_USERNAME` | Database user |
+| `POSTGRES_DB_PASSWORD` | Database password |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_SECRET_KEY` | Cloudinary secret |
+| `CLOUDINARY_ENVIRONMENT_NAME` | Cloudinary cloud name |
+| `REDIS_HOST` | Redis host |
+| `REDIS_PORT` | Redis port |
+| `REDIS_USERNAME` | Redis username |
+| `REDIS_PASSWORD` | Redis password |
+| `HASHNODE_BASE_URL` | Hashnode GraphQL API (e.g. `https://gql.hashnode.com`) |
+| `HASHNODE_ACCESS_TOKEN` | Hashnode personal access token |
+| `GITHUB_USERNAME` | GitHub username (for projects) |
+| `GITHUB_BASE_URL` | GitHub API base URL |
+| `GITHUB_ACCESS_TOKEN` | GitHub personal access token |
+
+Create a `.env` file in the project root with these variables before running the server.
+
+## API overview
+
+Base URL is `http://localhost:<PORT>` (or your deployed host). Responses are wrapped by a global success interceptor; errors are normalized by the exception filter.
+
+| Module | Method | Path | Description |
+|--------|--------|------|-------------|
+| App | GET | `/` | Root / info |
+| App | GET | `/health-check` | Health check |
+| Status | GET | `/status` | Online/offline by working hours (IST) |
+| Weather | GET | `/weather` | Weather data |
+| Quote | GET | `/quote` | Quote of the day (cached via Redis) |
+| Posts | GET | `/posts` | List blog posts (Hashnode; optional `page`, `pageSize`) |
+| Posts | GET | `/posts/:slug` | Single post with full content (Hashnode) |
+| Projects | GET | `/projects` | List projects |
+| Experience | GET | `/experience` | List experience entries |
+| Experience | POST | `/experience` | Create experience |
+| Experience | GET | `/experience/:id` | Get experience by id |
+| Experience | PUT | `/experience/:id` | Update experience |
+| Experience | DELETE | `/experience/:id` | Delete experience |
+| Education | GET | `/education` | List education |
+| Education | POST | `/education` | Create education |
+| Education | GET | `/education/:id` | Get by id |
+| Education | PATCH | `/education/:id` | Update |
+| Education | DELETE | `/education/:id` | Delete |
+| Photos | GET | `/photos` | List photos |
+| Photos | POST | `/photos` | Upload / add photo |
+| Contact | GET | `/contact` | List contact messages |
+| Contact | POST | `/contact` | Submit contact form |
+| Contact | GET | `/contact/:id` | Get message by id |
+| Date | GET | `/date` | Current date/time (IST) |
+
+Global middleware: request validation, request context (e.g. request id, IP, user-agent), and rate limiting.
+
+## Docker
+
+Build and run with Docker Compose (maps host port 8000 to container port 3000):
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up --build
 ```
 
-## Deployment
+The API is then available at `http://localhost:8000`. Ensure a `.env` file is present (or pass env another way); the Compose file loads `env_file: .env`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Scripts
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+| Script | Description |
+|--------|-------------|
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run start` | Run compiled app |
+| `npm run start:dev` | Run in watch mode |
+| `npm run start:prod` | Run production build (`node dist/main`) |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Format with Prettier |
+| `npm run test` | Unit tests |
+| `npm run test:e2e` | E2E tests |
+| `npm run test:cov` | Test coverage |
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+## Project structure (high level)
+
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+src/
+├── adapters/       # External APIs (Hashnode, weather, zen-quotes, Cloudinary)
+├── core/           # Redis, Postgres, base entities, context
+├── helpers/        # Pipes, filters, interceptors, middleware
+├── module/         # Feature modules (posts, projects, experience, etc.)
+├── utils/          # Config, constants, errors
+└── main.ts         # Bootstrap
+```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+UNLICENSED (private). See repository or author for terms.
