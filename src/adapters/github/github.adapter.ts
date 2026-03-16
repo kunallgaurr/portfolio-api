@@ -2,6 +2,7 @@ import { config, InternalServerError } from "src/utils";
 import z, { ZodError, ZodSchema } from "zod";
 import { GithubParams } from "./github.types";
 import { Injectable } from "@nestjs/common";
+import { GithubRepoListSchema, GithubRepoSchema } from "./github.schema";
 
 @Injectable()
 export class GithubAdapter {
@@ -16,6 +17,10 @@ export class GithubAdapter {
         const headers = new Headers();
         headers.set('Authorization', `Bearer ${config.GITHUB_ACCESS_TOKEN}`);
         headers.set('Content-Type', 'application/json');
+
+        for(const [key, value] of Object.entries(params.headers)) {
+            headers.set(key, value);
+        }
 
         let response;
         try {
@@ -37,7 +42,6 @@ export class GithubAdapter {
         try {
             json = await response.json();
         } catch (error) {
-            console.error(error);
             throw new InternalServerError('Github Adapter: Invalid JSON response');
         }
 
@@ -59,9 +63,7 @@ export class GithubAdapter {
             headers: {},
         };
 
-        const schema = z.any();
-
-        return this.call(params, schema);
+        return this.call(params, GithubRepoListSchema);
     }
 
     async getSingleRepo(username: string, repo: string) {
@@ -71,8 +73,6 @@ export class GithubAdapter {
             headers: {},
         };
 
-        const schema = z.any();
-
-        return this.call(params, schema);
+        return this.call(params, GithubRepoSchema);
     }
 }
