@@ -1,20 +1,15 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { ProjectsController } from './project.controller';
 import { ProjectsService } from './project.service';
-import { Project, ProjectPoint } from './entities';
-import { ProjectRepository, ProjectPointRepository } from './repositories';
+import { GithubAdapter } from "src/adapters/github";
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Project, ProjectPoint])
-    ],
+    imports: [],
     controllers: [ProjectsController],
     providers: [
         ProjectsService,
-        ProjectRepository,
-        ProjectPointRepository
+        GithubAdapter
     ],
     exports: [ProjectsService]
 })
